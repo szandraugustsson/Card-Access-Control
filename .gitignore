@@ -2,3 +2,4 @@ main
 main.dSYM/
 .DS_Store
 settings.json
+.vscode/
