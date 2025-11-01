@@ -1,6 +1,6 @@
 PROG = main
-SRC = main.c
-CFLAGS = -g
+SRC = *.c
+CFLAGS = -Wall -Werror -g
 LIBS = 
 
 all: $(PROG)

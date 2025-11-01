@@ -1,24 +1,54 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "menu.h"
+#include "cardfunctions.h"
+#include "safeinput.h"
+#include "waitforenter.h"
 
 int main()
-{
-    while(true)
+{   
+    CardList allCards; //skapar en lista med kort som kan innehålla många 'Card'
+    allCards.cards = NULL; //pekar till alla korten
+    allCards.count = 0; //0 kort i listan
+
+    loadCardsFromFile(&allCards);
+
+    while(1)
     {
-        printf("Admin menu\n");
-        printf("1. Remote open door\n");
-        printf("2. List all cards in system\n");
-        printf("3. Add/remove access\n");
-        printf("4. Exit\n");
-        printf("9. FAKE TEST SCAN CARD\n");
-        printf("Select option: \n");
+        printMenu();
+        printf("\n");
+
+        int selection;
         
-        int option;
-        scanf(" %d", &option);
-        if (option == 4)
-            break;
+        if(!GetInputInt("Select option: ", &selection))
+        {
+            printf("Invalid choice. Choose between 1, 2, 3, 4 and 9\n");
+            waitForEnter();
+            continue;
+        }
+        printf("\n");
+
+        switch(selection)
+        {
+            case 1:
+                remoteOpenDoor();
+                break;
+            case 2:
+                listAllCards(&allCards); //skickar pekare, inte kopia
+                break;
+            case 3:
+                addRemoveAccess(&allCards);
+                break;
+            case 4:
+                //alla kort ska sparas i filen innan programmet slutar
+                saveCardsToFile(&allCards);
+                return 0;
+            case 9:
+                fakeCardScan(&allCards);
+                break;
+            default:
+                printf("Invalid choice. Choose between 1, 2, 3, 4 and 9\n");
+                waitForEnter();
+        }
     }
-
-return 0;
-
 }
