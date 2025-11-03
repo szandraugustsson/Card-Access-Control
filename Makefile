@@ -1,14 +1,24 @@
 PROG = main
-SRC = *.c
+# CC = gcc
+DEPS = cardfunctions.h menu.h safeinput.h waitforenter.h
+SRC = main.c cardfunctions.c menu.c safeinput.c waitforenter.c
 CFLAGS = -Wall -Werror -g
-LIBS = 
+OUTPUTDIR = obj
+OBJS = $(addprefix $(OUTPUTDIR)/, $(SRC:.c=.o))
 
-all: $(PROG)
+all: $(OUTPUTDIR) $(PROG)
 
-$(PROG): $(SRC)
-	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(SRC)  $(LIBS) 
+$(PROG): $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS)
 
+$(OUTPUTDIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OUTPUTDIR):
+	@mkdir -p $(OUTPUTDIR)
+
+# på Mac finns inte del
 clean:
-	rm -f $(PROG)
+	@rm -rf $(OUTPUTDIR) $(PROG)
 
 .PHONY: all clean
